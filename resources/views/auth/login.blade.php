@@ -39,7 +39,7 @@
                 autofocus
                 autocomplete="username"
                 placeholder="Masukkan email"
-                class="w-full rounded-2xl border border-[#E7DED3] px-5 py-4 focus:ring-2 focus:ring-[#8B5E3C] focus:border-[#8B5E3C]">
+                class="w-full rounded-2xl border border-[#E7DED3] px-5 py-4 focus:ring-2 focus:ring-[#182d5c] focus:border-[#182d5c]">
 
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
 
@@ -57,7 +57,7 @@
                 required
                 autocomplete="current-password"
                 placeholder="Masukkan password"
-                class="w-full rounded-2xl border border-[#E7DED3] px-5 py-4 focus:ring-2 focus:ring-[#8B5E3C] focus:border-[#8B5E3C]">
+                class="w-full rounded-2xl border border-[#E7DED3] px-5 py-4 focus:ring-2 focus:ring-[#182d5c] focus:border-[#182d5c]">
 
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
 
@@ -79,7 +79,7 @@
             @if (Route::has('password.request'))
 
                 <a href="{{ route('password.request') }}"
-                    class="text-sm text-[#8B5E3C] hover:underline">
+                    class="text-sm text-[#182d5c] hover:underline">
 
                     Lupa password?
 
@@ -91,7 +91,7 @@
 
         <!-- BUTTON -->
         <button type="submit"
-            class="w-full bg-[#8B5E3C] hover:bg-[#6F472D] text-white py-4 rounded-2xl font-medium transition">
+            class="w-full bg-[#182d5c] hover:bg-[#2d3a6f] text-white py-4 rounded-2xl font-medium transition">
 
             Masuk
 
@@ -103,7 +103,7 @@
             Belum punya akun?
 
             <a href="{{ route('register') }}"
-                class="text-[#8B5E3C] font-semibold hover:underline">
+                class="text-[#182d5c] font-semibold hover:underline">
 
                 Register
 

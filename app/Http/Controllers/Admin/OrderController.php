@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -95,5 +96,70 @@ class OrderController extends Controller
         ]);
 
         return back()->with('success', 'Status order berhasil diupdate');
+    }
+
+    public function confirmPayment(Order $order)
+    {
+        if ($order->payment_status == 'paid') {
+
+            return back()->with(
+                'error',
+                'Pesanan sudah dibayar.'
+            );
+        }
+
+        $order->payment_status = 'paid';
+        $order->save();
+
+        foreach ($order->items as $item) {
+
+            $product = Product::find($item->product_id);
+
+            if ($product) {
+
+                $product->stock -= $item->quantity;
+
+                if ($product->stock < 0) {
+                    $product->stock = 0;
+                }
+
+                $product->save();
+            }
+        }
+
+        return back()->with(
+            'success',
+            'Pembayaran berhasil dikonfirmasi.'
+        );
+    }
+
+    public function markPaid($id)
+    {
+        $order = Order::with('items.product')->findOrFail($id);
+
+        if ($order->payment_status == 'paid') {
+            return back();
+        }
+
+        $order->payment_status = 'paid';
+        $order->save();
+
+        foreach ($order->items as $item) {
+
+            if ($item->product) {
+
+                $newStock = $item->product->stock - $item->quantity;
+
+                $item->product->update([
+                    'stock' => max(0, $newStock)
+                ]);
+
+            }
+        }
+
+        return back()->with(
+            'success',
+            'Pembayaran berhasil dikonfirmasi.'
+        );
     }
 }

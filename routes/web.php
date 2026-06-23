@@ -149,6 +149,14 @@ Route::prefix('admin')
         Route::get('/orders/{id}', [AdminOrderController::class, 'show']);
 
         Route::put('/orders/{id}/status', [AdminOrderController::class, 'updateStatus']);
+        Route::post('/admin/orders/{order}/confirm-payment',
+            [AdminOrderController::class, 'confirmPayment']
+        )->name('admin.orders.confirm-payment');
+
+        Route::put(
+            '/admin/orders/{order}/mark-paid',
+            [App\Http\Controllers\Admin\OrderController::class, 'markPaid']
+        )->name('admin.orders.markPaid');
 
     });
 

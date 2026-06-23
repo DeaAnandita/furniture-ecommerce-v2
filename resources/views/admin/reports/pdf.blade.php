@@ -2,11 +2,9 @@
 <html>
 <head>
     <meta charset="utf-8">
-
     <title>Laporan Penjualan</title>
 
     <style>
-
         body{
             font-family: DejaVu Sans, sans-serif;
             font-size: 12px;
@@ -76,176 +74,127 @@
         }
 
         .footer{
-            margin-top:30px;
+            margin-top:40px;
             text-align:right;
         }
 
+        .small{
+            font-size:11px;
+            color:#777;
+        }
     </style>
-
 </head>
+
 <body>
 
 <div class="header">
-
     <h2>LAPORAN PENJUALAN</h2>
-
-    <p>Budi Alumunium</p>
-
-    <p>
-        Dicetak :
-        {{ now()->format('d F Y H:i') }}
+    <p><strong>Budi Aluminium</strong></p>
+    <p class="small">
+        Dicetak pada: {{ now()->format('d F Y H:i') }}
     </p>
-
 </div>
 
 <table class="summary">
-
     <tr>
-
         <td>
-            <div class="summary-title">
-                Total Pesanan
-            </div>
-
-            <div class="summary-value">
-                {{ $totalOrders }}
-            </div>
+            <div class="summary-title">Total Pesanan</div>
+            <div class="summary-value">{{ $totalOrders }}</div>
         </td>
 
         <td>
-            <div class="summary-title">
-                Total Pendapatan
-            </div>
-
+            <div class="summary-title">Total Pendapatan</div>
             <div class="summary-value">
-                Rp {{ number_format($totalRevenue) }}
+                Rp {{ number_format($totalRevenue, 0, ',', '.') }}
             </div>
         </td>
-
     </tr>
-
 </table>
 
 <h3>Riwayat Transaksi</h3>
 
 <table>
-
     <thead>
-
         <tr>
             <th>No</th>
-            <th>ID Order</th>
+            <th>Order ID</th>
             <th>Total</th>
             <th>Status</th>
             <th>Tanggal</th>
         </tr>
-
     </thead>
 
     <tbody>
-
         @foreach($orders as $order)
-
         <tr>
-
             <td>{{ $loop->iteration }}</td>
 
-            <td>#{{ $order->id }}</td>
+            {{-- kalau kamu pakai Midtrans, ini lebih aman --}}
+            <td>{{ $order->order_id ?? ('ORDER-' . $order->id) }}</td>
 
-            <td>
-                Rp {{ number_format($order->total_price) }}
+            <td>Rp {{ number_format($order->total_price, 0, ',', '.') }}</td>
+
+            <td class="px-6 py-4">
+                @if($order->payment_status == 'paid')
+
+                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+                        Paid
+                    </span>
+
+                @endif
             </td>
 
-            <td>
-                {{ ucfirst($order->status) }}
-            </td>
-
-            <td>
-                {{ $order->created_at->format('d-m-Y') }}
-            </td>
-
+            <td>{{ $order->created_at->format('d-m-Y') }}</td>
         </tr>
-
         @endforeach
-
     </tbody>
-
 </table>
 
 <h3>Produk Terlaris</h3>
 
 <table>
-
     <thead>
-
         <tr>
             <th>Produk</th>
             <th>Jumlah Terjual</th>
         </tr>
-
     </thead>
 
     <tbody>
-
         @foreach($bestProducts as $product)
-
         <tr>
-
             <td>{{ $product->name }}</td>
-
             <td>{{ $product->sold }}</td>
-
         </tr>
-
         @endforeach
-
     </tbody>
-
 </table>
 
-<h3>Produk Dengan Stok Menipis</h3>
+<h3>Produk Stok Menipis</h3>
 
 <table>
-
     <thead>
-
         <tr>
             <th>Produk</th>
             <th>Sisa Stok</th>
         </tr>
-
     </thead>
 
     <tbody>
-
         @foreach($lowStockProducts as $product)
-
         <tr>
-
             <td>{{ $product->name }}</td>
-
             <td>{{ $product->stock }}</td>
-
         </tr>
-
         @endforeach
-
     </tbody>
-
 </table>
 
 <div class="footer">
-
-    <p>
-        Mengetahui,
-    </p>
-
+    <p>Mengetahui,</p>
     <br><br><br>
-
-    <p>
-        _______________________
-    </p>
-
+    <p>_______________________</p>
+    <p class="small">Admin / Owner</p>
 </div>
 
 </body>

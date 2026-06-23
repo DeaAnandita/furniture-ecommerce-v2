@@ -20,7 +20,7 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background: #F5EFE6;
+            background: #e6ecf5;
         }
 
         .hero-title {
@@ -28,12 +28,12 @@
         }
 
         .primary-btn {
-            background: #8B5E3C;
+            background: #182d5c;
             transition: .3s;
         }
 
         .primary-btn:hover {
-            background: #6F472D;
+            background: #2d3a6f;
         }
     </style>
 </head>
@@ -46,7 +46,7 @@
         <!-- LEFT -->
         <div class="hidden lg:block relative">
 
-            <img src="https://images.pexels.com/photos/6585757/pexels-photo-6585757.jpeg"
+            <img src="{{ asset('hero.png') }}"
                 class="absolute inset-0 w-full h-full object-cover">
                 
 
@@ -54,17 +54,16 @@
 
             <div class="relative z-10 h-full flex flex-col justify-center px-16 text-white">
 
-                <p class="uppercase tracking-[4px] text-sm mb-5">
-                    Furniture Interior
+                <p class="uppercase tracking-[3px] text-xs md:text-sm mb-3 md:mb-4">
+                    Furniture Modern
                 </p>
 
-                <h1 class="hero-title text-6xl font-bold leading-tight mb-6">
-                    Rumah Nyaman,
-                    Hidup Lebih Tenang
+                <h1 class="hero-title text-3xl md:text-6xl font-bold leading-tight mb-4 md:mb-6">
+                    Ruang Nyaman, Hidup Lebih Bermakna
                 </h1>
 
-                <p class="text-lg text-gray-200 max-w-md leading-relaxed">
-                    Temukan furniture aesthetic modern dengan nuansa hangat dan elegan untuk rumah impianmu.
+                <p class="text-sm md:text-lg text-gray-200 mb-6 md:mb-8">
+                    Melayani pembuatan kusen, pintu, jendela, partisi kaca, etalase dan berbagai kebutuhan alumunium untuk rumah maupun bangunan komersial.
                 </p>
 
             </div>

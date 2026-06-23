@@ -48,13 +48,24 @@ class PaymentController extends Controller
 
             $params = [
                 'transaction_details' => [
-                    'order_id' => 'ORDER-' . $order->id,
+                    'order_id' =>  'ORDER-' . date('Y-m-d') . '-' . mt_rand(1000, 999999),
                     'gross_amount' => (int) $order->total_price,
                 ],
                 'customer_details' => [
-                    'first_name' => auth()->user()->name,
-                    'email' => auth()->user()->email,
-                ],
+                'first_name' => auth()->user()->name,
+                'email'      => auth()->user()->email,
+                'phone'      => auth()->user()->phone, // tambahkan kolom phone
+                
+            ],
+
+            'item_details' => $order->items->map(function ($item) {
+                return [
+                    'id'       => $item->product_id,
+                    'price'    => (int) $item->price,
+                    'quantity' => (int) $item->quantity,
+                    'name'     => substr($item->product->name, 0, 50),
+                ];
+            })->toArray(),
             ];
 
             $snapToken = Snap::getSnapToken($params);

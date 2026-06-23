@@ -225,8 +225,8 @@
 
                 <tr class="border-t">
 
-                    <td class="px-6 py-4">
-                        #{{ $order->id }}
+                    <td class="px-6 py-4 font-medium text-[#1E3A5F]">
+                        {{ $order->order_id ?? ('ORDER-' . $order->id) }}
                     </td>
 
                     <td class="px-6 py-4 font-semibold">
@@ -235,11 +235,13 @@
 
                     <td class="px-6 py-4">
 
-                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+                        @if($order->payment_status == 'paid')
 
-                            {{ ucfirst($order->status) }}
+                            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+                                Paid
+                            </span>
 
-                        </span>
+                        @endif
 
                     </td>
 

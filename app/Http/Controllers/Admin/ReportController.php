@@ -16,7 +16,7 @@ class ReportController extends Controller
         $start = $request->start_date;
         $end = $request->end_date;
 
-        $orders = Order::query();
+        $orders = Order::where('payment_status', 'paid');
 
         if ($start && $end) {
             $orders->whereBetween('created_at', [
@@ -32,7 +32,9 @@ class ReportController extends Controller
         $totalRevenue = $orders->sum('total_price');
 
         $bestProducts = DB::table('order_items')
+            ->join('orders', 'orders.id', '=', 'order_items.order_id')
             ->join('products', 'products.id', '=', 'order_items.product_id')
+            ->where('orders.payment_status', 'paid')
             ->select(
                 'products.name',
                 DB::raw('SUM(order_items.quantity) as sold')
@@ -55,16 +57,35 @@ class ReportController extends Controller
         ));
     }
 
-    public function exportPdf()
+    public function exportPdf(Request $request)
     {
-        $orders = Order::latest()->get();
+        $start = $request->start_date;
+        $end = $request->end_date;
+
+        $orders = Order::where('payment_status', 'paid');
+
+        if ($start && $end) {
+            $orders->whereBetween('created_at', [
+                $start . ' 00:00:00',
+                $end . ' 23:59:59'
+            ]);
+        }
+
+        $orders = $orders->latest()->get();
 
         $totalOrders = $orders->count();
-
         $totalRevenue = $orders->sum('total_price');
 
         $bestProducts = DB::table('order_items')
+            ->join('orders', 'orders.id', '=', 'order_items.order_id')
             ->join('products', 'products.id', '=', 'order_items.product_id')
+            ->where('orders.payment_status', 'paid')
+            ->when($start && $end, function ($q) use ($start, $end) {
+                $q->whereBetween('orders.created_at', [
+                    $start . ' 00:00:00',
+                    $end . ' 23:59:59'
+                ]);
+            })
             ->select(
                 'products.name',
                 DB::raw('SUM(order_items.quantity) as sold')
@@ -78,16 +99,13 @@ class ReportController extends Controller
             ->orderBy('stock')
             ->get();
 
-        $pdf = Pdf::loadView(
-            'admin.reports.pdf',
-            compact(
-                'orders',
-                'totalOrders',
-                'totalRevenue',
-                'bestProducts',
-                'lowStockProducts'
-            )
-        );
+        $pdf = Pdf::loadView('admin.reports.pdf', compact(
+            'orders',
+            'totalOrders',
+            'totalRevenue',
+            'bestProducts',
+            'lowStockProducts'
+        ));
 
         return $pdf->download('laporan-penjualan.pdf');
     }

@@ -40,19 +40,35 @@
             </div>
 
             <!-- STATUS -->
-            <div>
+            <div class="flex flex-col items-start lg:items-end gap-3">
 
                 @if($order->payment_status == 'paid')
 
                     <span class="bg-green-100 text-green-700 px-4 py-2 md:px-5 md:py-3 rounded-xl md:rounded-2xl text-sm font-medium">
-                        Paid
+                        ✓ Paid
                     </span>
 
                 @else
 
                     <span class="bg-yellow-100 text-yellow-700 px-4 py-2 md:px-5 md:py-3 rounded-xl md:rounded-2xl text-sm font-medium">
-                        Pending
+                        ⏳ Pending
                     </span>
+
+                    <form action="{{ route('admin.orders.markPaid', $order->id) }}"
+                        method="POST"
+                        onsubmit="return confirm('Yakin ingin mengubah status menjadi PAID?')">
+
+                        @csrf
+                        @method('PUT')
+
+                        <button type="submit"
+                                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl font-medium transition shadow-sm">
+
+                            ✓ Konfirmasi Pembayaran
+
+                        </button>
+
+                    </form>
 
                 @endif
 
@@ -65,7 +81,7 @@
     <!-- CUSTOMER -->
     <div class="p-4 md:p-8 border-b border-[#F3ECE3]">
 
-        <div class="grid grid-cols-3 gap-2 md:gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
 
             <!-- CUSTOMER -->
             <div class="bg-[#F8F3EC] rounded-2xl md:rounded-3xl p-3 md:p-5 min-w-0">
@@ -85,7 +101,7 @@
             </div>
 
             <!-- TOTAL -->
-            <div class="bg-[#F8F3EC] rounded-2xl md:rounded-3xl p-3 md:p-5">
+            <div class="bg-[#F8F3EC] rounded-2xl md:rounded-3xl p-4 md:p-5 min-w-0">
 
                 <p class="text-[10px] md:text-sm text-gray-500 mb-1">
                     Total
@@ -98,7 +114,7 @@
             </div>
 
             <!-- ITEMS -->
-            <div class="bg-[#F8F3EC] rounded-2xl md:rounded-3xl p-3 md:p-5">
+            <div class="bg-[#F8F3EC] rounded-2xl md:rounded-3xl p-4 md:p-5 min-w-0">
 
                 <p class="text-[10px] md:text-sm text-gray-500 mb-1">
                     Items
